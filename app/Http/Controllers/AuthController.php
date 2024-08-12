@@ -46,7 +46,7 @@ class AuthController extends Controller
         catch(\Exception $e){
             return $this->errorResponse(['message' => $e->getMessage()],500);
         }
-       
+
     }
     public function login(Request $request){
         try{
@@ -58,7 +58,7 @@ class AuthController extends Controller
                 return $this->errorResponse($validator->errors(), 422);
             }
             if (!Auth::attempt($request->only('email', 'password'))) {
-                return $this->errorResponse(['message' => 'Invalid credentials'], 401); 
+                return $this->errorResponse(['message' => 'Invalid credentials'], 401);
             }
             $user = Auth::user();
           $token = $user->createToken($request->userAgent())->plainTextToken;
@@ -110,7 +110,7 @@ class AuthController extends Controller
             $user = User::where('email', $request->email)->first();
                 $user->password = bcrypt($request->password);
                 $user->save();
-                return $this->successResponse(null, 'Password reset successfully');  
+                return $this->successResponse(null, 'Password reset successfully');
         } catch (\Exception $e) {
             return $this->errorResponse(['message' => $e->getMessage()], 500);
         }
@@ -162,7 +162,7 @@ class AuthController extends Controller
      return $this->successResponse(null, 'Email verified successfully');
        }catch (\Exception $exception){
             return $this->errorResponse(['message'=>$exception->getMessage()],500);
-        }  
+        }
     }
     public function profile(Request $request){
         try {
@@ -173,7 +173,7 @@ class AuthController extends Controller
             return  $this->successResponse(['user' => $user],'messages.user_retrieved_successfully');
         }catch (\Exception $exception){
             return $this->errorResponse(['message'=>$exception->getMessage()],500);
-        } 
+        }
     }
     public function changePassword(Request $request)
 {
@@ -181,7 +181,7 @@ class AuthController extends Controller
         // Validate request data
         $validator = Validator::make($request->all(), [
             'current_password' => ['required', 'string'],
-            'new_password' => ['required', 'string', 'min:8', 'confirmed'], 
+            'new_password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
         if ($validator->fails()) {

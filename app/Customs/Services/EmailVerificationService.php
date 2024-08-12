@@ -2,14 +2,21 @@
 
 
 namespace App\Customs\Services;
+use App\Mail\VerifyEmail;
 use App\Models\EmailVerificationToken;
 use App\Notifications\VerifyEmailNotification;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 class EmailVerificationService
 {
     public function sendEmailVerificationLink(object $user) :void {
-        Notification::send($user, new VerifyEmailNotification($this->generateVerificationLink($user->email)));
+        $email = $user->email;
+        $verificationLink = $this->generateVerificationLink($email);
+
+        if ($verificationLink) {
+            Mail::to($email)->send(new VerifyEmail($verificationLink));
+        }
     }
 
     public function generateVerificationLink($email) :string
